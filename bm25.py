@@ -3,19 +3,8 @@ import argparse
 from pyserini.search.lucene import LuceneSearcher
 from pyserini.search import get_topics, get_qrels
 from indexpaths import THE_INDEX,THE_TOPICS
-import csv
 import os
 
-
-parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', help = 'Input dataset', type=str)
-parser.add_argument('--k', help = 'Input k', type=int)
-
-args = parser.parse_args()
-if args.dataset:
-    data =args.dataset 
-if args.k:
-    k = args.k
 
 class BM25():
 
@@ -42,7 +31,7 @@ if __name__ == "__main__":
     bm25=BM25(index_name=THE_INDEX[data])
     topics = get_topics(THE_TOPICS[data] if data != 'dl20' else 'dl20')
     qrels = get_qrels(THE_TOPICS[data])
-    with open('Stuff.csv', 'w', newline='') as file:
+    with open(f'{data}.csv', 'w', newline='') as file:
         for i in topics:
             query = topics[i]['title']
             qid = i
