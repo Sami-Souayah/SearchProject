@@ -6,7 +6,6 @@ from indexpaths import THE_INDEX,THE_TOPICS
 import csv
 import os
 
-test
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', help = 'Input dataset', type=str)
