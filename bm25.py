@@ -30,6 +30,15 @@ class BM25():
         return hits
     
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', help = 'Input dataset', type=str)
+    parser.add_argument('--k', help = 'Input k', type=int)
+
+    args = parser.parse_args()
+    if args.dataset:
+        data =args.dataset 
+    if args.k:
+        k = args.k  
     bm25=BM25(index_name=THE_INDEX[data])
     topics = get_topics(THE_TOPICS[data] if data != 'dl20' else 'dl20')
     qrels = get_qrels(THE_TOPICS[data])
