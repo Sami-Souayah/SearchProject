@@ -31,7 +31,7 @@ if __name__ == "__main__":
     bm25=BM25(index_name=THE_INDEX[data])
     topics = get_topics(THE_TOPICS[data] if data != 'dl20' else 'dl20')
     qrels = get_qrels(THE_TOPICS[data])
-    with open(f'{data}.csv', 'w', newline='') as file:
+    with open(f'{data}_run.csv', 'w', newline='') as file:
         for i in topics:
             query = topics[i]['title']
             qid = i
@@ -40,7 +40,7 @@ if __name__ == "__main__":
             for hit in hits:
                 file.write(f'QueryID: {qid} Document ID: {hit.docid} Rank: {rank} Score: {hit.score}\n')
                 rank+=1
-    print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} 'Stuff.csv'"))
+    print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '{data}_run.csv'"))
 
 
 
