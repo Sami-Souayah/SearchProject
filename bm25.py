@@ -38,7 +38,7 @@ if __name__ == "__main__":
             hits = bm25.search(query, k=k)
             rank=1
             for hit in hits:
-                file.write(f'QueryID: {qid} Document ID: {hit.docid} Rank: {rank} Score: {hit.score}\n')
+                file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank\n')
                 rank+=1
     print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '{data}_run.csv'"))
 

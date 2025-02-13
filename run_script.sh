@@ -2,6 +2,6 @@ datasets=('dl19' 'covid' 'arguana' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'n
 
 for dataset in "${datasets[@]}"; do
     echo "Processing $dataset..."
-    python3 bm25.py --dataset "$dataset" --k 100
+    python3 bm25.py --dataset "$dataset" --k 1000
 done
-echo "All datasets processed!
+echo "All datasets processed!"
