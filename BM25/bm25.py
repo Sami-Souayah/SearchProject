@@ -21,6 +21,19 @@ class BM25():
         return hits
     
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', help = 'Input dataset', type=str)
+    parser.add_argument('--k', help = 'Input k', type=int)
+    parser.add_argument('--rm3', help = 'Toggle RM3',  action='store_true')
+
+    args = parser.parse_args()
+    if args.dataset:
+        data =args.dataset 
+    if args.k:
+        k = args.k  
+    rm3 = False
+    if args.rm3:
+        rm3 = True
     bm25=BM25(index_name=THE_INDEX[data])
     topics = get_topics(THE_TOPICS[data] if data != 'dl20' else 'dl20')
     qrels = get_qrels(THE_TOPICS[data])
@@ -38,11 +51,7 @@ if __name__ == "__main__":
 
 datasets=('dl19' 'covid' 'arguana' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'quora' 'dbpedia' 'fever' 'robust04' 'signal')
 
-for dataset in "${datasets[@]}"; do
-    echo "Processing $dataset..."
-    python3 bm25.py --dataset "$dataset" --k 1000
-done
-echo "All datasets processed!"
+
 
 
 
