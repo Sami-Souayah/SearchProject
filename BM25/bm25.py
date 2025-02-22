@@ -38,7 +38,7 @@ if __name__ == "__main__":
     topics = get_topics(THE_TOPICS[data] if data != 'dl20' else 'dl20')
     qrels = get_qrels(THE_TOPICS[data])
     if rm3==True:
-           with open(f'{data}_RM3_run.csv', 'w', newline='') as file:
+        with open(f'{data}_RM3_run.csv', 'w', newline='') as file:
             for i in topics:
                 query = topics[i]['title']
                 qid = i
@@ -47,6 +47,8 @@ if __name__ == "__main__":
                 for hit in hits:
                     file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank \n')
                     rank+=1
+        print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '{data}_RM3_run.csv'"))
+    
     else:
         with open(f'{data}_run.csv', 'w', newline='') as file:
             for i in topics:
@@ -57,7 +59,7 @@ if __name__ == "__main__":
                 for hit in hits:
                     file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank \n')
                     rank+=1
-    print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} 'Stuff.csv'"))
+    print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '{data}_run.csv'"))
 
 
 
