@@ -34,22 +34,31 @@ if __name__ == "__main__":
     rm3 = False
     if args.rm3:
         rm3 = True
-    bm25=BM25(index_name=THE_INDEX[data])
+    bm25=BM25(index_name=THE_INDEX[data], rm3=rm3)
     topics = get_topics(THE_TOPICS[data] if data != 'dl20' else 'dl20')
     qrels = get_qrels(THE_TOPICS[data])
-    with open('Stuff.csv', 'w', newline='') as file:
-        for i in topics:
-            query = topics[i]['title']
-            qid = i
-            hits = bm25.search(query, k=k)
-            rank=1
-            for hit in hits:
-                file.write(f'QueryID: {qid} Document ID: {hit.docid} Rank: {rank} Score: {hit.score}\n')
-                rank+=1
+    if rm3==True:
+           with open(f'{data}_RM3_run.csv', 'w', newline='') as file:
+            for i in topics:
+                query = topics[i]['title']
+                qid = i
+                hits = bm25.search(query, k=k)
+                rank=1
+                for hit in hits:
+                    file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank \n')
+                    rank+=1
+    else:
+        with open(f'{data}_run.csv', 'w', newline='') as file:
+            for i in topics:
+                query = topics[i]['title']
+                qid = i
+                hits = bm25.search(query, k=k)
+                rank=1
+                for hit in hits:
+                    file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank \n')
+                    rank+=1
     print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} 'Stuff.csv'"))
 
-
-datasets=('dl19' 'covid' 'arguana' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'quora' 'dbpedia' 'fever' 'robust04' 'signal')
 
 
 
