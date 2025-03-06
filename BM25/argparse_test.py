@@ -1,5 +1,5 @@
 import argparse
-from indexpaths import THE_INDEX, THE_TOPICS
+from BM25.indexpaths import THE_INDEX, THE_TOPICS
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', help = 'Input dataset', type=str)
 parser.add_argument('--k', help = 'Input k', type=int)
