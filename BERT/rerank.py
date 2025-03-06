@@ -28,12 +28,12 @@ class FetchText():
         with open(self.directory, mode='r', encoding='utf-8') as file:
             reader = csv.reader(file, delimiter=' ')
             for row in reader:
-                if i == 10:
-                    break
                 docID = row[2]
                 self.FetchText(docID)
 
 
+
 if __name__ == "__main__":
-    fetch = FetchText('dl19')
+    fetch = FetchText('fiqa')
     fetch.ReadCSV()
+    print(fetch.text.keys())
