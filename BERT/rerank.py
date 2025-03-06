@@ -20,6 +20,8 @@ class FetchText():
             self.text[query] = json_doc['contents']
         else:
             self.text[query] = json_doc['text']
+            if 'title' in json_doc:
+                self.text[query] = f'{json_doc["title"]} {json_doc['text']}'
 
 
 if __name__ == "__main__":
