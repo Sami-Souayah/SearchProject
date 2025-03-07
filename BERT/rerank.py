@@ -1,5 +1,5 @@
 import pyserini
-from transformers import BertTokenizer
+from transformers import AutoTokenizer
 import torch
 from indexpaths import THE_INDEX,THE_TOPICS
 import json
@@ -16,7 +16,7 @@ class FetchText():
         self.tokenized_text = {}
         self.topics = get_topics(THE_TOPICS[dataset] if dataset != 'dl20' else 'dl20')
         self.directory = f"/Users/sami/Desktop/MIT Research Project/CSV Files/{dataset}_run.csv"
-        self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+        self.tokenizer = AutoTokenizer.from_pretrained("cross-encoder/ms-marco-MiniLM-L6-v2")
     
     def FetchText(self, docid):
         searcher =  LuceneSearcher.from_prebuilt_index(THE_INDEX[self.dataset])
