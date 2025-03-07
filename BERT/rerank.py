@@ -33,7 +33,9 @@ class FetchText():
     def ReadCSV(self):
         with open(self.directory, mode='r', encoding='utf-8') as file:
             reader = csv.reader(file, delimiter=' ')
-            for row in reader:
+            for i,row in enumerate(reader):
+                if i == 10:
+                    break
                 docID = row[2]
                 self.FetchText(docID)
     def tokenize_text(self, text, max_length=512):
