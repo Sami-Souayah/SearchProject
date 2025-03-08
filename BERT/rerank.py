@@ -56,4 +56,4 @@ class FetchText():
 if __name__ == "__main__":
     fetch = FetchText('fiqa')
     fetch.ReadCSV()
-    print(fetch.text.keys())
+    print(fetch.tokenized_text)
