@@ -30,6 +30,7 @@ class FetchText():
                 text = f"{json_doc['title']} {json_doc['text']}"
         self.text[docid] = text
         self.tokenized_text[docid] = self.tokenize_text(text)
+
     def ReadCSV(self):
         with open(self.directory, mode='r', encoding='utf-8') as file:
             reader = csv.reader(file, delimiter=' ')
@@ -47,7 +48,7 @@ class FetchText():
             return_tensors="pt", 
         )
         return {
-            "input_ids": encoding["input_ids"].squeeze(0),
+            "input_text": encoding["input_text"].squeeze(0),
             "attention_mask": encoding["attention_mask"].squeeze(0),
         }
 
@@ -56,4 +57,4 @@ class FetchText():
 if __name__ == "__main__":
     fetch = FetchText('fiqa')
     fetch.ReadCSV()
-    print(fetch.tokenized_text)
+    print(fetch.text)
