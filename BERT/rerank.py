@@ -1,5 +1,5 @@
 import pyserini
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 from indexpaths import THE_INDEX,THE_TOPICS
 import json
@@ -14,9 +14,11 @@ class FetchText():
         self.dataset = dataset
         self.text = {}
         self.tokenized_text = {}
+        self.model = AutoModelForSequenceClassification.from_pretrained('cross-encoder/ms-marco-MiniLM-L6-v2')
         self.topics = get_topics(THE_TOPICS[dataset] if dataset != 'dl20' else 'dl20')
         self.directory = f"/Users/sami/Desktop/MIT Research Project/CSV Files/{dataset}_run.csv"
         self.tokenizer = AutoTokenizer.from_pretrained("cross-encoder/ms-marco-MiniLM-L6-v2")
+        self.final_scores = {}
     
     def FetchText(self, docid):
         searcher =  LuceneSearcher.from_prebuilt_index(THE_INDEX[self.dataset])
@@ -48,13 +50,26 @@ class FetchText():
             return_tensors="pt", 
         )
         return {
-            "input_text": encoding["input_text"].squeeze(0),
+            "input_ids": encoding["input_ids"].squeeze(0),
             "attention_mask": encoding["attention_mask"].squeeze(0),
         }
+    def ModelEval(self):
+        model = self.model
+        model.eval()
+        for i in self.tokenized_text:
+            input_ids = self.tokenized_text[i]['input_ids'].unsqueeze(0)
+            attention_mask = self.tokenized_text[i]['attention_mask'].unsqueeze(0)
+            with torch.no_grad():
+                scores = model(input_ids, attention_mask).logits
+            self.final_scores[i] = scores
+
+
+
 
 
 
 if __name__ == "__main__":
     fetch = FetchText('fiqa')
     fetch.ReadCSV()
-    print(fetch.text)
+    fetch.ModelEval()
+    print(fetch.final_scores)
