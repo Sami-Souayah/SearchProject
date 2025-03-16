@@ -8,7 +8,6 @@ import csv
 import os
 from pyserini.search.lucene import LuceneSearcher
 from pyserini.search import get_topics, get_qrels
-from pyserini.eval.trec_eval import evaluate
 
 
 directory = '/home/gridsan/ssouayah/BM25Output'
@@ -66,7 +65,6 @@ class FetchText():
                 scores = model(**self.tokenized_text[i]).logits.item()
             self.final_scores[i] = scores
         self.final_scores = dict(sorted(self.final_scores.items(), key=lambda x: x[1], reverse=True))
-    
 
     def WriteToFile(self):
         output_filename = os.path.join(OutputDir, f'{self.dataset}_bert.csv')
@@ -93,9 +91,9 @@ if __name__ == "__main__":
     fetch.ModelEval()
     fetch.WriteToFile()
     qrels = get_qrels(THE_TOPICS[data])
-    runfile = os.path.join(OutputDir, f'{data}_bert.csv')
-    ndcg_score = evaluate(runfile, qrels, metric="ndcg_cut_10")
-    print(f"nDCG@10 for {data}: {ndcg_score}")
+    print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '/home/gridsan/ssouayah/BERTOutput/{data}_bert.csv'"))
+
+
 
 
 
