@@ -14,17 +14,17 @@ from pyserini.search import get_topics, get_qrels
 directory = '/home/gridsan/ssouayah/BM25Output'
 OutputDir = '/home/gridsan/ssouayah/BERTOutput'
 chunk_size = 500
+model_name = '/home/gridsan/ssouayah/ms-marco-MiniLM-L6-v2'
 
 class FetchText():
     def __init__(self,dataset):
         self.dataset = dataset
         self.topics = get_topics(THE_TOPICS[self.dataset] if self.dataset != 'dl20' else 'dl20')
         self.qid = 0
-        self.text = {}
         self.tokenized_text = {}
-        self.model = AutoModelForSequenceClassification.from_pretrained('cross-encoder/ms-marco-MiniLM-L6-v2')
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_name)
         self.directory = f"/home/gridsan/ssouayah/BM25Output/{dataset}_run.csv"
-        self.tokenizer = AutoTokenizer.from_pretrained("cross-encoder/ms-marco-MiniLM-L6-v2")
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.final_scores = {}
     
     def FetchText(self, docid, qid):
@@ -34,7 +34,6 @@ class FetchText():
         if self.dataset == 'dl19' or self.dataset == 'dl20':
             text = json_doc['contents']
         else:
-            self.text[docid] = json_doc['text']
             if 'title' in json_doc:
                 text = f"{json_doc['title']} {json_doc['text']}"
         self.tokenized_text[docid] = self.tokenize_text(text, qid)
