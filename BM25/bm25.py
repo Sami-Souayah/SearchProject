@@ -6,6 +6,8 @@ from indexpaths import THE_INDEX,THE_TOPICS
 import os
 
 
+directory = '/home/gridsan/ssouayah/BM25Output'
+
 class BM25():
 
     def __init__(self, index_name, rm3, k1=0.82,k2=0.68):
@@ -38,7 +40,8 @@ if __name__ == "__main__":
     topics = get_topics(THE_TOPICS[data] if data != 'dl20' else 'dl20')
     qrels = get_qrels(THE_TOPICS[data])
     if rm3==True:
-        with open(f'{data}_RM3_run.csv', 'w', newline='') as file:
+        output_filename = os.path.join(directory, f'{data}_RM3_run.csv')
+        with open(output_filename, 'w', newline='') as file:
             for i in topics:
                 query = topics[i]['title']
                 qid = i
@@ -50,7 +53,8 @@ if __name__ == "__main__":
         print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '{data}_RM3_run.csv'"))
     
     else:
-        with open(f'{data}_run.csv', 'w', newline='') as file:
+        output_filename = os.path.join(directory, f'{data}_run.csv')
+        with open(output_filename, 'w', newline='') as file:
             for i in topics:
                 query = topics[i]['title']
                 qid = i
