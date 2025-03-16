@@ -36,7 +36,6 @@ class FetchText():
             self.text[docid] = json_doc['text']
             if 'title' in json_doc:
                 text = f"{json_doc['title']} {json_doc['text']}"
-        self.text[docid] = text
         self.tokenized_text[docid] = self.tokenize_text(text, qid)
 
     def ReadCSV(self):
@@ -72,16 +71,13 @@ class FetchText():
     def WriteToFile(self):
         output_filename = os.path.join(OutputDir, f'{self.dataset}_bert.csv')
         with open(output_filename, 'w', newline='') as file:
+            count=0
             for i in self.final_scores:
                 docid = i
                 query = self.topics[self.qid]['title']
                 rank = self.final_scores[i]
-                file.write(f'Query ID: {self.qid} DocID: {docid} BERT score: {rank} Query: {query} ')
-                    
-
-
-
-
+                count+=1
+                file.write(f'{self.qid} Q0 {docid} {count} {rank} rank \n')
 
 
 if __name__ == "__main__":
