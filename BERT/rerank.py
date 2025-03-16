@@ -2,6 +2,7 @@ import pyserini
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 from indexpaths import THE_INDEX,THE_TOPICS
+import argparse
 import json
 import csv
 import os
@@ -69,7 +70,14 @@ class FetchText():
 
 
 if __name__ == "__main__":
-    fetch = FetchText('fiqa')
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', help = 'Input dataset', type=str)
+
+    args = parser.parse_args()
+    if args.dataset:
+        data =args.dataset 
+
+    fetch = FetchText(data)
     fetch.ReadCSV()
     fetch.ModelEval()
     print(fetch.final_scores)
