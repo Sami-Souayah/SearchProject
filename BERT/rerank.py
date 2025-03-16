@@ -8,6 +8,8 @@ import csv
 import os
 from pyserini.search.lucene import LuceneSearcher
 from pyserini.search import get_topics, get_qrels
+from pyserini.eval.trec_eval import evaluate
+
 
 directory = '/home/gridsan/ssouayah/BM25Output'
 OutputDir = '/home/gridsan/ssouayah/BERTOutput'
@@ -41,8 +43,6 @@ class FetchText():
         with open(self.directory, mode='r', encoding='utf-8') as file:
             reader = csv.reader(file, delimiter=' ')
             for i,row in enumerate(reader):
-                if i == 10:
-                    break
                 docID = row[2]
                 self.qid = int(row[0])
                 bm25score = row[4]
@@ -96,3 +96,10 @@ if __name__ == "__main__":
     fetch.ReadCSV()
     fetch.ModelEval()
     fetch.WriteToFile()
+    qrels = get_qrels(THE_TOPICS[data])
+    runfile = os.path.join(OutputDir, f'{data}_bert.csv')
+    ndcg_score = evaluate(runfile, qrels, metric="ndcg_cut_10")
+    print(f"nDCG@10 for {data}: {ndcg_score}")
+
+
+
