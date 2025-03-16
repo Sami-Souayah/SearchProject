@@ -36,6 +36,7 @@ if __name__ == "__main__":
     rm3 = False
     if args.rm3:
         rm3 = True
+    print('hit')
     bm25=BM25(index_name=THE_INDEX[data], rm3=rm3)
     topics = get_topics(THE_TOPICS[data] if data != 'dl20' else 'dl20')
     qrels = get_qrels(THE_TOPICS[data])
