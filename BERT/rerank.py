@@ -16,7 +16,7 @@ class FetchText():
         self.tokenized_text = {}
         self.model = AutoModelForSequenceClassification.from_pretrained('cross-encoder/ms-marco-MiniLM-L6-v2')
         self.topics = get_topics(THE_TOPICS[dataset] if dataset != 'dl20' else 'dl20')
-        self.directory = f"/Users/sami/Desktop/MIT Research Project/CSV Files/{dataset}_run.csv"
+        self.directory = f"/home/gridsan/ssouayah/BM25Output/{dataset}_run.csv"
         self.tokenizer = AutoTokenizer.from_pretrained("cross-encoder/ms-marco-MiniLM-L6-v2")
         self.final_scores = {}
     
