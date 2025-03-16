@@ -8,7 +8,7 @@ import os
 from pyserini.search.lucene import LuceneSearcher
 from pyserini.search import get_topics, get_qrels
 
-directory = '/Users/sami/Desktop/MIT Research Project/CSV Files'
+directory = '/home/gridsan/ssouayah/BM25Output'
 class FetchText():
     def __init__(self,dataset):
         self.dataset = dataset
