@@ -10,9 +10,12 @@ from pyserini.search.lucene import LuceneSearcher
 from pyserini.search import get_topics, get_qrels
 
 directory = '/home/gridsan/ssouayah/BM25Output'
+OutputDir = '/home/gridsan/ssouayah/BERTOutput'
+
 class FetchText():
     def __init__(self,dataset):
         self.dataset = dataset
+        self.query = dataset
         self.text = {}
         self.tokenized_text = {}
         self.model = AutoModelForSequenceClassification.from_pretrained('cross-encoder/ms-marco-MiniLM-L6-v2')
@@ -61,8 +64,18 @@ class FetchText():
             input_ids = self.tokenized_text[i]['input_ids'].unsqueeze(0)
             attention_mask = self.tokenized_text[i]['attention_mask'].unsqueeze(0)
             with torch.no_grad():
-                scores = model(input_ids, attention_mask).logits
+                scores = model(input_ids, attention_mask).logits.item()
             self.final_scores[i] = scores
+        self.final_scores = dict(sorted(self.final_scores.items(), key=lambda x: x[1], reverse=True))
+
+    def WriteToFile(self):
+        output_filename = os.path.join(OutputDir, f'{data}_bert.csv')
+        with open(output_filename, 'w', newline='') as file:
+            for i in self.final_scores:
+                docid = i
+                rank = self.final_scores[i]
+                file.write(f'DocID: {docid} Re-ranked: {rank}')
+                    
 
 
 
@@ -80,4 +93,4 @@ if __name__ == "__main__":
     fetch = FetchText(data)
     fetch.ReadCSV()
     fetch.ModelEval()
-    print(fetch.final_scores)
+    fetch.WriteToFile()
