@@ -15,16 +15,16 @@ OutputDir = '/home/gridsan/ssouayah/BERTOutput'
 class FetchText():
     def __init__(self,dataset):
         self.dataset = dataset
-        self.query = dataset
+        self.topics = get_topics(THE_TOPICS[self.dataset] if self.dataset != 'dl20' else 'dl20')
+        self.qid = 0
         self.text = {}
         self.tokenized_text = {}
         self.model = AutoModelForSequenceClassification.from_pretrained('cross-encoder/ms-marco-MiniLM-L6-v2')
-        self.topics = get_topics(THE_TOPICS[dataset] if dataset != 'dl20' else 'dl20')
         self.directory = f"/home/gridsan/ssouayah/BM25Output/{dataset}_run.csv"
         self.tokenizer = AutoTokenizer.from_pretrained("cross-encoder/ms-marco-MiniLM-L6-v2")
         self.final_scores = {}
     
-    def FetchText(self, docid):
+    def FetchText(self, docid, qid):
         searcher =  LuceneSearcher.from_prebuilt_index(THE_INDEX[self.dataset])
         doc = searcher.doc(docid)
         json_doc = json.loads(doc.raw())
@@ -35,7 +35,7 @@ class FetchText():
             if 'title' in json_doc:
                 text = f"{json_doc['title']} {json_doc['text']}"
         self.text[docid] = text
-        self.tokenized_text[docid] = self.tokenize_text(text)
+        self.tokenized_text[docid] = self.tokenize_text(text, qid)
 
     def ReadCSV(self):
         with open(self.directory, mode='r', encoding='utf-8') as file:
@@ -44,37 +44,39 @@ class FetchText():
                 if i == 10:
                     break
                 docID = row[2]
-                self.FetchText(docID)
-    def tokenize_text(self, text, max_length=512):
+                self.qid = int(row[0])
+                bm25score = row[4]
+                self.FetchText(docID, self.qid)
+
+    def tokenize_text(self, text, qid):
+        qid = int(qid)
+        query = self.topics[qid]['title']
         encoding = self.tokenizer(
-            text,
-            padding="max_length", 
-            truncation=True,  
-            max_length=max_length, 
+            text, query,
+            padding=True, 
+            truncation=True, 
             return_tensors="pt", 
         )
-        return {
-            "input_ids": encoding["input_ids"].squeeze(0),
-            "attention_mask": encoding["attention_mask"].squeeze(0),
-        }
+        return encoding
+    
     def ModelEval(self):
         model = self.model
         model.eval()
         for i in self.tokenized_text:
-            input_ids = self.tokenized_text[i]['input_ids'].unsqueeze(0)
-            attention_mask = self.tokenized_text[i]['attention_mask'].unsqueeze(0)
             with torch.no_grad():
-                scores = model(input_ids, attention_mask).logits.item()
+                scores = model(**self.tokenized_text[i]).logits.item()
             self.final_scores[i] = scores
         self.final_scores = dict(sorted(self.final_scores.items(), key=lambda x: x[1], reverse=True))
+    
 
     def WriteToFile(self):
-        output_filename = os.path.join(OutputDir, f'{data}_bert.csv')
+        output_filename = os.path.join(OutputDir, f'{self.dataset}_bert.csv')
         with open(output_filename, 'w', newline='') as file:
             for i in self.final_scores:
                 docid = i
+                query = self.topics[self.qid]['title']
                 rank = self.final_scores[i]
-                file.write(f'DocID: {docid} Re-ranked: {rank}')
+                file.write(f'Query ID: {self.qid} DocID: {docid} BERT score: {rank} Query: {query} ')
                     
 
 
