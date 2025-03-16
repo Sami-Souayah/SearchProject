@@ -5,6 +5,7 @@ from indexpaths import THE_INDEX,THE_TOPICS
 import argparse
 import json
 import csv
+import pandas as pd
 import os
 from pyserini.search.lucene import LuceneSearcher
 from pyserini.search import get_topics, get_qrels
@@ -12,6 +13,7 @@ from pyserini.search import get_topics, get_qrels
 
 directory = '/home/gridsan/ssouayah/BM25Output'
 OutputDir = '/home/gridsan/ssouayah/BERTOutput'
+chunk_size = 500
 
 class FetchText():
     def __init__(self,dataset):
@@ -38,12 +40,11 @@ class FetchText():
         self.tokenized_text[docid] = self.tokenize_text(text, qid)
 
     def ReadCSV(self):
-        with open(self.directory, mode='r', encoding='utf-8') as file:
-            reader = csv.reader(file, delimiter=' ')
-            for i,row in enumerate(reader):
-                docID = row[2]
-                self.qid = int(row[0])
-                bm25score = row[4]
+        input_filename = os.path.join(directory, f'{self.dataset}_run.csv')
+        for chunk in pd.read_csv(input_filename, delimiter=' ', chunksize=chunk_size):
+             for _, row in chunk.iterrows():
+                self.qid = int(row.iloc[0])
+                docID = row.iloc[2]
                 self.FetchText(docID, self.qid)
 
     def tokenize_text(self, text, qid):
