@@ -76,9 +76,8 @@ if __name__ == "__main__":
 
         # TODO: sort query reranked by score in decending order and append it to reranked_run
        # sorted_query_reranked = <Fill this in...
-        sorted_query_reranked = query_reranked.sort(key=lambda x: x[2], reverse=True)
+        sorted_query_reranked = sorted(query_reranked,key=lambda x: x[2], reverse=True)
         reranked_run.append(sorted_query_reranked)
-        print(reranked_run)
 
 
     # TODO: Now take reranked run, flatten it, and write it to a file...
