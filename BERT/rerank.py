@@ -74,13 +74,10 @@ if __name__ == "__main__":
             
             query_reranked.append([qid, docid, prob_relevant])
 
-        # TODO: sort query reranked by score in decending order and append it to reranked_run
-       # sorted_query_reranked = <Fill this in...
         sorted_query_reranked = sorted(query_reranked,key=lambda x: x[2], reverse=True)
         reranked_run.append(sorted_query_reranked)
 
 
-    # TODO: Now take reranked run, flatten it, and write it to a file...
 
     with open(f'/home/gridsan/ssouayah/BERTOutput/{dataset}_BERT.csv', 'w', newline='') as file:
         for query_results in reranked_run:
