@@ -51,6 +51,8 @@ if __name__ == "__main__":
                     file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank \n')
                     rank+=1
         print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '/home/gridsan/ssouayah/BM25Output/{data}_RM3_run.csv'"))
+        print(os.system(f"python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 {THE_TOPICS[data]} '/home/gridsan/ssouayah/BM25Output/{data}_run.csv'"))
+
     
     else:
         output_filename = os.path.join(directory, f'{data}_run.csv')
@@ -63,7 +65,9 @@ if __name__ == "__main__":
                 for hit in hits:
                     file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank \n')
                     rank+=1
-    print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '/home/gridsan/ssouayah/BM25Output/{data}_run.csv'"))
+        print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '/home/gridsan/ssouayah/BM25Output/{data}_run.csv'"))
+        print(os.system(f"python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 {THE_TOPICS[data]} '/home/gridsan/ssouayah/BM25Output/{data}_run.csv'"))
+
 
 
 
