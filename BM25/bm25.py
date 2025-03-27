@@ -3,6 +3,7 @@ import argparse
 from pyserini.search.lucene import LuceneSearcher
 from pyserini.search import get_topics, get_qrels
 from indexpaths import THE_INDEX,THE_TOPICS
+from tqdm import tqdm
 import os
 
 
@@ -42,12 +43,12 @@ if __name__ == "__main__":
     if rm3==True:
         output_filename = os.path.join(directory, f'{data}_RM3_run.csv')
         with open(output_filename, 'w', newline='') as file:
-            for i in topics:
+            for i in tqdm(topics, desc="Processing Queries"):
                 query = topics[i]['title']
                 qid = i
                 hits = bm25.search(query, k=k)
                 rank=1
-                for hit in hits:
+                for hit in tqdm(hits, desc=f"Writing Docs for Query {qid}", leave=False):
                     file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank \n')
                     rank+=1
         print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '/home/gridsan/ssouayah/BM25Output/{data}_RM3_run.csv'"))
@@ -57,12 +58,12 @@ if __name__ == "__main__":
     else:
         output_filename = os.path.join(directory, f'{data}_run.csv')
         with open(output_filename, 'w', newline='') as file:
-            for i in topics:
+            for i in tqdm(topics, desc="Processing Queries"):
                 query = topics[i]['title']
                 qid = i
                 hits = bm25.search(query, k=k)
                 rank=1
-                for hit in hits:
+                for hit in tqdm(hits, desc=f"Writing Docs for Query {qid}", leave=False):
                     file.write(f'{qid} Q0 {hit.docid} {rank} {hit.score} rank \n')
                     rank+=1
         print(os.system(f"python -m pyserini.eval.trec_eval -c -m recall.100 {THE_TOPICS[data]} '/home/gridsan/ssouayah/BM25Output/{data}_run.csv'"))
