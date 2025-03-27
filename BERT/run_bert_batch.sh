@@ -7,7 +7,6 @@
 #SBATCH -c 4              # Request 4 CPU cores
 #SBATCH --mem=16G         # Request 16GB RAM
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=your_email@mit.edu  # Replace with your MIT email
 
 # Load environment
 source /etc/profile
