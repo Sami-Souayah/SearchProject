@@ -10,6 +10,7 @@ import os
 from pyserini.search.lucene import LuceneSearcher
 from pyserini.search import get_topics, get_qrels
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 directory = '/home/gridsan/ssouayah/BM25Output'
 OutputDir = '/home/gridsan/ssouayah/BERTOutput'
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     topics = get_topics(THE_TOPICS[dataset] if dataset != 'dl20' else 'dl20')
     topics = {str(key): value for key, value in topics.items()}    
     qrels = get_qrels(THE_TOPICS[dataset])
-    model = AutoModelForSequenceClassification.from_pretrained(model_name)
+    model = AutoModelForSequenceClassification.from_pretrained(model_name).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     reranked_run = [] 
@@ -65,7 +66,7 @@ if __name__ == "__main__":
                             padding=True, 
                             truncation=True, 
                             return_tensors="pt", 
-                    )
+                    ).to(device)
             
             # We need the score of only the positive label, usually at index 1.
             # 0 = Prob of non-relevant
