@@ -1,5 +1,8 @@
 export HF_HOME=/tmp/huggingface
 
+#Full dataset: 'dl19' 'dl20' 'covid' 'arguana' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'quora' 'dbpedia' 'fever' 'robust04' 'signal'
+# Datasets variable under may be modified to reflect datasets already processed. 
+
 datasets=('dl19' 'dl20' 'covid' 'arguana' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'quora' 'dbpedia' 'fever' 'robust04' 'signal')
 
 for dataset in "${datasets[@]}"; do

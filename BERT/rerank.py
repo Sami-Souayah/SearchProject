@@ -88,7 +88,7 @@ if __name__ == "__main__":
             for document in query_results:
                 file.write(f'{document[0]} Q0 {document[1]} {rank} {document[2]} rank \n')
                 rank += 1
-print(os.system(f"python -m pyserini.eval.trec_eval -c -m ncdg_cut.10 {THE_TOPICS[dataset]} '/home/gridsan/ssouayah/BERTOutput/{dataset}_BERT.csv'"))
+print(os.system(f"python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 {THE_TOPICS[dataset]} '/home/gridsan/ssouayah/BERTOutput/{dataset}_BERT.csv'"))
 
 
 
