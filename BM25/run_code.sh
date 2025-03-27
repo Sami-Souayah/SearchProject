@@ -1,4 +1,7 @@
-datasets=('dl19' 'dl20' 'covid' 'arguana' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'quora' 'dbpedia' 'fever' 'robust04' 'signal')
+#Original dataset: 'dl19' 'dl20' 'covid' 'arguana' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'quora' 'dbpedia' 'fever' 'robust04' 'signal'
+#Dataset variable my be changed to reflect what datasets are needed
+
+datasets=('quora' 'dbpedia' 'fever' 'robust04' 'signal')
 
 for dataset in "${datasets[@]}"; do
     echo "Processing $dataset..."
