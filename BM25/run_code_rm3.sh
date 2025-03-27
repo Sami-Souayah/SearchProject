@@ -1,7 +1,7 @@
-#Original dataset: 'dl19' 'dl20' 'covid' 'arguana' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'quora' 'dbpedia' 'fever' 'robust04' 'signal'
+#Full dataset: 'dl19' 'dl20' 'covid' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'dbpedia' 'robust04''
 #Dataset variable my be changed to reflect what datasets are needed
 
-datasets=('quora' 'dbpedia' 'fever' 'robust04' 'signal')
+datasets=('dl19' 'dl20' 'covid' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'dbpedia' 'robust04')
 
 
 for dataset in "${datasets[@]}"; do
