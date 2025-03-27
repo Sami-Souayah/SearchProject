@@ -72,7 +72,8 @@ if __name__ == "__main__":
             # We need the score of only the positive label, usually at index 1.
             # 0 = Prob of non-relevant
             # 1 = Prob of relevant
-            prob_relevant = model(**encoding).logits.item()
+            with torch.no_grad():
+                prob_relevant = model(**encoding).logits.item()
             
             query_reranked.append([qid, docid, prob_relevant])
 
