@@ -5,6 +5,7 @@ from indexpaths import THE_INDEX,THE_TOPICS
 import argparse
 import json
 import csv
+from tqdm import tqdm
 import pandas as pd
 import os
 from pyserini.search.lucene import LuceneSearcher
@@ -50,14 +51,14 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     reranked_run = [] 
-    for qid in topics:
+    for qid in tqdm(topics, desc="Processing Queries"):
         qid = str(qid)
         # Fetch BM25 results for the given topic
         query = topics[qid]['title']
         bm25_query_results = bm25_run[bm25_run['qid'] == qid]
         # This should be 1000 x num_columns....
         query_reranked = [] 
-        for id, row in bm25_query_results.iterrows():
+        for id, row in tqdm(bm25_query_results.iterrows(), desc=f"Reranking Docs for Query {qid}", leave=False):
             docid = row['docid']
             document_text = load_text(dataset, searcher, docid)
 
