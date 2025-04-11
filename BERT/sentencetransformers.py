@@ -6,7 +6,7 @@ import argparse
 import json
 import csv
 from tqdm import tqdm
-from sentencetransformers import SentenceTransformer, util
+from sentencetransformers import CrossEncoder
 import pandas as pd
 import os
 from pyserini.search.lucene import LuceneSearcher
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     topics = get_topics(THE_TOPICS[dataset] if dataset != 'dl20' else 'dl20')
     topics = {str(key): value for key, value in topics.items()}    
     qrels = get_qrels(THE_TOPICS[dataset])
-    model = SentenceTransformer(model_name, device=device)
+    model = CrossEncoder(model_name, device=device)
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     reranked_run = [] 
@@ -63,10 +63,8 @@ if __name__ == "__main__":
             docid = row['docid']
             document_text = load_text(dataset, searcher, docid)
 
-            query_embedding = model.encode(query, convert_to_tensor=True)
-            doc_embedding = model.encode(document_text, convert_to_tensor=True)
+            prob_relevant = model.rank(query, document_text, return_documents=False)
 
-            prob_relevant = util.cos_sim(query_embedding, doc_embedding).item()
             
             query_reranked.append([qid, docid, prob_relevant])
 
