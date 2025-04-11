@@ -64,9 +64,8 @@ if __name__ == "__main__":
             document_text = load_text(dataset, searcher, docid)
 
             prob_relevant = model.rank(query, document_text, return_documents=False)
-
             
-            query_reranked.append([qid, docid, prob_relevant])
+            query_reranked.append([qid, docid, prob_relevant['score']])
 
         sorted_query_reranked = sorted(query_reranked,key=lambda x: x[2], reverse=True)
         reranked_run.append(sorted_query_reranked)
