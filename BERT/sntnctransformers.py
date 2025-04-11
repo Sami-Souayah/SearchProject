@@ -6,7 +6,7 @@ import argparse
 import json
 import csv
 from tqdm import tqdm
-from sentencetransformers import CrossEncoder
+from sentence_transformers import CrossEncoder
 import pandas as pd
 import os
 from pyserini.search.lucene import LuceneSearcher
@@ -15,7 +15,7 @@ from pyserini.search import get_topics, get_qrels
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 directory = '/home/gridsan/ssouayah/BM25Output'
-OutputDir = '/home/gridsan/ssouayah/BERTOutput'
+OutputDir = '/home/gridsan/ssouayah/SNTNCOutput'
 chunk_size = 500
 model_name = '/home/gridsan/ssouayah/ms-marco-MiniLM-L6-v2'
 # This is minimal code to get a reranker running. You'll need to fill in the blanks, but this is
@@ -73,7 +73,6 @@ if __name__ == "__main__":
             
             #query_reranked.append([qid, docid, prob_relevant['score']])
 
-
         query_reranked = []
         for res in prob_relevant:
             corpus_idx = res['corpus_id']
@@ -84,14 +83,14 @@ if __name__ == "__main__":
         sorted_query_reranked = sorted(query_reranked, key=lambda x: x[2], reverse=True)
         reranked_run.append(sorted_query_reranked)
 
-    with open(f'/home/gridsan/ssouayah/BERTOutput/{dataset}_BERT.csv', 'w', newline='') as file:
+    with open(f'/home/gridsan/ssouayah/SNTNCOutput/{dataset}_sntnc.csv', 'w', newline='') as file:
         for query_results in reranked_run:
             rank = 0
             for document in query_results:
                 file.write(f'{document[0]} Q0 {document[1]} {rank} {document[2]} rank \n')
                 rank += 1
 
-print(os.system(f"python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 {THE_TOPICS[dataset]} '/home/gridsan/ssouayah/BERTOutput/{dataset}_BERT.csv'"))
+print(os.system(f"python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 {THE_TOPICS[dataset]} '/home/gridsan/ssouayah/SNTNCOutput/{dataset}_sntnc.csv'"))
 
 
 

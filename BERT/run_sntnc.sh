@@ -7,7 +7,7 @@ datasets=('dl19')
 
 for dataset in "${datasets[@]}"; do
     echo "Processing $dataset..."
-    python sentencetransformers.py --dataset "$dataset"
+    python sntnctransformers.py --dataset "$dataset"
 done
 
 echo "All datasets processed!"
