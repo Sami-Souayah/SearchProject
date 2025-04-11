@@ -59,18 +59,30 @@ if __name__ == "__main__":
         bm25_query_results = bm25_run[bm25_run['qid'] == qid]
         # This should be 1000 x num_columns....
         query_reranked = [] 
-        for id, row in tqdm(bm25_query_results.iterrows(), desc=f"Reranking Docs for Query {qid}", leave=False):
+        documents = []
+        doc_ids = []
+
+        for _, row in tqdm(bm25_query_results.iterrows(), desc=f"Preparing Docs for Query {qid}", leave=False):
             docid = row['docid']
             document_text = load_text(dataset, searcher, docid)
+            documents.append(document_text)
+            doc_ids.append(docid)
 
-            prob_relevant = model.rank(query, document_text, return_documents=False)
+
+        prob_relevant = model.rank(query, documents, return_documents=False)
             
-            query_reranked.append([qid, docid, prob_relevant['score']])
+            #query_reranked.append([qid, docid, prob_relevant['score']])
 
-        sorted_query_reranked = sorted(query_reranked,key=lambda x: x[2], reverse=True)
+
+        query_reranked = []
+        for res in prob_relevant:
+            corpus_idx = res['corpus_id']
+            score = res['score']
+            docid = doc_ids[corpus_idx]
+            query_reranked.append([qid, docid, score])
+
+        sorted_query_reranked = sorted(query_reranked, key=lambda x: x[2], reverse=True)
         reranked_run.append(sorted_query_reranked)
-
-
 
     with open(f'/home/gridsan/ssouayah/BERTOutput/{dataset}_BERT.csv', 'w', newline='') as file:
         for query_results in reranked_run:
