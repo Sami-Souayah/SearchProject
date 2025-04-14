@@ -56,7 +56,7 @@ if __name__ == "__main__":
         qid = str(qid)
         # Fetch BM25 results for the given topic
         query = topics[qid]['title']
-        bm25_query_results = bm25_run[bm25_run['qid'] == qid]
+        bm25_query_results = bm25_run[bm25_run['qid'] == qid][:100]
         # This should be 1000 x num_columns....
         query_reranked = [] 
         documents = []

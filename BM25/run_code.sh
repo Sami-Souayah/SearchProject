@@ -5,6 +5,6 @@ datasets=('robust04')
 
 for dataset in "${datasets[@]}"; do
     echo "Processing $dataset..."
-    python bm25.py --dataset "$dataset" --k 1000
+    python bm25.py --dataset "$dataset" --k 100
 done
 echo "All datasets processed!"
