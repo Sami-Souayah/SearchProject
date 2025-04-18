@@ -10,4 +10,4 @@ for dataset in "${datasets[@]}"; do
     python rerank.py --dataset "$dataset"
 done
 
-echo "All datasets processed!"
+echo "All datasets processed!" 
