@@ -37,10 +37,12 @@ def load_text(dataset, searcher, docid):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', help = 'Input dataset', type=str)
+    parser.add_argument('--model', help= 'Input Model', type=str)
 
 
     args = parser.parse_args()
     dataset = args.dataset
+    model_name = args.model
     bm25_run = pd.read_csv(f'/home/gridsan/ssouayah/BM25Output/{dataset}_run.csv', delimiter=' ', dtype=str)
     bm25_run.columns = ['qid', 'q0', 'docid', 'rank', 'score','extra','extra']
     searcher =  LuceneSearcher.from_prebuilt_index(THE_INDEX[dataset])
