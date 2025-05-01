@@ -92,7 +92,7 @@ if __name__ == "__main__":
                 file.write(f'{document[0]} Q0 {document[1]} {rank} {document[2]} rank \n')
                 rank += 1
 
-print(os.system(f"python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 {THE_TOPICS[dataset]} '/home/gridsan/ssouayah/SNTNCOutput/{dataset}_sntnc.csv'"))
+print(os.system(f"python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 {THE_TOPICS[dataset]} '/home/gridsan/ssouayah/SNTNCOutput/{dataset}{endstuff}_sntnc.csv'"))
 
 
 
