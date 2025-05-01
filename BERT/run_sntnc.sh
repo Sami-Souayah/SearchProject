@@ -6,7 +6,7 @@ export HF_HOME=/tmp/huggingface
 
 
 datasets=('dl19' 'dl20' 'covid' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc' 'dbpedia' 'robust04' 'signal')
-models=('/home/gridsan/ssouayah/ms-marco-MiniLM-L6-v2' '/home/gridsan/ssouayah/ms-marco-MiniLM-L4-v2' '/home/gridsan/ssouayah/ms-marco-MiniLM-L2-v2' '/home/gridsan/ssouayah/ms-marco-MiniLM-L12-v2')
+models=('/home/gridsan/ssouayah/ms-marco-MiniLM-L4-v2' '/home/gridsan/ssouayah/ms-marco-MiniLM-L2-v2' '/home/gridsan/ssouayah/ms-marco-MiniLM-L12-v2')
 
 for model in "${models[@]}"; do
     echo "Processing $model..."
