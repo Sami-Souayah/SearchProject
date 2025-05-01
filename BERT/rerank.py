@@ -16,7 +16,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 directory = '/home/gridsan/ssouayah/BM25Output'
 OutputDir = '/home/gridsan/ssouayah/BERTOutput'
 chunk_size = 500
-model_name = '/home/gridsan/ssouayah/ms-marco-MiniLM-L6-v2'
+#model_name = '/home/gridsan/ssouayah/ms-marco-MiniLM-L6-v2'
 # This is minimal code to get a reranker running. You'll need to fill in the blanks, but this is
 # the structure you need for the code.
 
@@ -43,6 +43,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     dataset = args.dataset
     model_name = args.model
+    endstuff = model_name[30:32]
     bm25_run = pd.read_csv(f'/home/gridsan/ssouayah/BM25Output/{dataset}_run.csv', delimiter=' ', dtype=str)
     bm25_run.columns = ['qid', 'q0', 'docid', 'rank', 'score','extra','extra']
     searcher =  LuceneSearcher.from_prebuilt_index(THE_INDEX[dataset])
@@ -84,7 +85,7 @@ if __name__ == "__main__":
 
 
 
-    with open(f'/home/gridsan/ssouayah/BERTOutput/{dataset}_BERT.csv', 'w', newline='') as file:
+    with open(f'/home/gridsan/ssouayah/BERTOutput/{dataset}{endstuff}_BERT.csv', 'w', newline='') as file:
         for query_results in reranked_run:
             rank = 0
             for document in query_results:
