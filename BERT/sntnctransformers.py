@@ -37,6 +37,7 @@ def load_text(dataset, searcher, docid):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', help= 'Input Dataset', type=str)
     parser.add_argument('--model', help= 'Input Model', type=str)
 
 

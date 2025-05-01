@@ -8,9 +8,9 @@ datasets=('dl19' 'dl20' 'covid' 'touche' 'news' 'scifact' 'fiqa' 'scidocs' 'nfc'
 models=('/home/gridsan/ssouayah/ms-marco-MiniLM-L4-v2' '/home/gridsan/ssouayah/ms-marco-MiniLM-L2-v2' '/home/gridsan/ssouayah/ms-marco-MiniLM-L12-v2')
 
 for model in "${models[@]}"; do
-    echo "Processing $model..."
     for dataset in "${datasets[@]}"; do
+        echo "Processing $model..."
         echo "Processing $dataset..."
-        python sntnctransformers.py --dataset "$dataset" --model "$model"
+        python rerank.py --dataset "$dataset" --model "$model"
     done
 done
